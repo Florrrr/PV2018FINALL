@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-catalog="cine"/>
+  <table-filter match-name="usuarios"/>
+  <table-filter match-name="pel_dir"/>
+  <table-filter match-name="ventas_entradas"/>
+  <table-filter match-name="peliculas"/>
+  <table-filter match-name="salas"/>
+  <table-filter match-name="pel_cla"/>
+  <table-filter match-name="butacas_carteleras"/>
+  <table-filter match-name="perfiles"/>
+  <table-filter match-name="butacas"/>
+  <table-filter match-name="carteleras"/>
+  <table-filter match-name="directores"/>
+  <table-filter match-name="clasificaciones"/>
+  <table-filter match-name="precios_carteleras"/>
+</hibernate-reverse-engineering>

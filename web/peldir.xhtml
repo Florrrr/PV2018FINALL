@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlPelDir" header="Peliculas-Directores">
+                    <h:form id="frmPelDir">
+                        <p:panelGrid id="tblBotonesPelDir" columns="1">
+                            <p:commandButton id="btnAgregarPelDir" value="Agregar"
+                                             oncomplete="PF('agregarPelDir').show()"
+                                             update="tblMuestraPelDir"/>
+                            <p:commandButton id="btnBuscarPelDir" value="Buscar"
+                                             oncomplete="PF('buscarPelDir').show()"
+                                             update="tblMuestraPelDir"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraPelDir" columns="4">
+                            <p:dataTable id="dtTblPelDir" value="#{pelDirFormBean.listaPelDir}"
+                                         var="cadaPelDir" emptyMessage="No hay peliculas-directores en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaPelDir.pdCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Pelicula">
+                                    <p:outputLabel value="#{cadaPelDir.peliculas.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Director">
+                                    <p:outputLabel value="#{cadaPelDir.directores.dirApellidos}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <p:outputLabel value="#{cadaPelDir.peliculas.pelDescripcion}"/>
+                                </p:column>     
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarPelDir"
+                              widgetVar="buscarPelDir"
+                              header="Buscar Pelicula-Director"
+                              resizable="false"
+                              showEffect="explode"
+                              width="500"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarPelDir">
+                            <p:panelGrid id="tblBuscarPelDir" columns="1">
+                                <h:panelGrid id="BuscarPelDir" columns="4">
+                                    <p:outputLabel for="codigoPelDir" value="Codigo de Pel-Director:"/>
+                                    <p:inputText id="codigoPelDir" required="true"
+                                                 value="#{pelDirFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarPelDir" value="Buscar"
+                                                     update=":frmBuscarPelDir"
+                                                     actionListener="#{pelDirFormBean.buscar()}"/>
+                                    <p:commandButton id="btnCerrarBuscarPelDir" value="Salir"
+                                                     oncomplete="PF('buscarPelDir').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbPelDirBuscadx" value="#{pelDirFormBean.unaPelDir}" emptyMessage="No encontrado">
+                                   <p:column headerText="Codigo">
+                                       <p:outputLabel value="#{pelDirFormBean.unaPelDir.pdCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Pelicula">
+                                        <p:outputLabel value="#{pelDirFormBean.unaPelDir.peliculas.pelNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Director">
+                                        <p:outputLabel value="#{pelDirFormBean.unaPelDir.directores.dirNombres} #{pelDirFormBean.unaPelDir.directores.dirApellidos}"/>
+                                    </p:column>
+                                    <p:column headerText="Descripcion">
+                                        <p:outputLabel value="#{pelDirFormBean.unaPelDir.peliculas.pelDescripcion}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>    
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

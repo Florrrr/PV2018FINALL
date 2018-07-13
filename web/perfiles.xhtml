@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlPerfiles" header="Perfiles">
+                    <h:form id="frmPerfiles">
+                        <p:panelGrid id="tblBotones" columns="2">
+                            <p:commandButton id="btnAgregarPerfil" value="Agregar"
+                                             oncomplete="PF('agregarPerfil').show()"
+                                             update="tblMuestraPerfiles"/>
+                            
+                            <p:commandButton id="btnBuscarPerfil" value="Buscar"
+                                             oncomplete="PF('buscarPerfil').show()"
+                                             update="tblMuestraPerfiles"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraPerfiles" columns="5">
+                            <p:dataTable id="dtTblPerfiles" value="#{perfilFormBean.listaPerfiles}"
+                                         var="cadaPerfil" emptyMessage="No hay perfiles en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaPerfil.usuarios.usuCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Usario">
+                                    <p:outputLabel value="#{cadaPerfil.usuarios.usuNombreUsuario}"/>
+                                </p:column>
+                                <p:column headerText="Tipo Usuario">
+                                    <p:outputLabel value="#{cadaPerfil.usuarios.usuTipoUsuario}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{cadaPerfil.perNombres}"/>
+                                </p:column>
+                                <p:column headerText="Perfil">
+                                    <p:outputLabel value="#{cadaPerfil.perApellidos}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarPerfil').show()"
+                                                     update=":frmPerfiles :frmModificarPerfil"
+                                                     actionListener="#{perfilFormBean.establecerPerfil(cadaPerfil)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarPerfil').show()"
+                                                     update=":frmPerfiles :frmEliminarPerfil"
+                                                     actionListener="#{perfilFormBean.establecerPerfil(cadaPerfil)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgBuscarPerfil"
+                              widgetVar="buscarPerfil"
+                              header="Buscar Perfil"
+                              resizable="false"
+                              showEffect="explode"
+                              width="1150"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarPerfil">
+                            <p:panelGrid id="tblBuscar" columns="1">
+                                <h:panelGrid id="Buscar" columns="4">
+                                    <p:outputLabel for="codigox" value="Codigo de Usuario:"/>
+                                    <p:inputText id="codigox" required="true"
+                                                 value="#{perfilFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarPerfils" value="Buscar"
+                                                     update=":frmBuscarPerfil"
+                                                     actionListener="#{perfilFormBean.buscarPerfil()}"/>
+                                    <p:commandButton id="btnCerrarBuscarAuto" value="Salir"
+                                                     oncomplete="PF('buscarPerfil').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbPerfilBuscado" value="#{perfilFormBean.unPerfil}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.usuarios.usuCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Usuario" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.usuarios.usuNombreUsuario}"/>
+                                    </p:column>
+                                    <p:column headerText="Tipo" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.usuarios.usuTipoUsuario}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombres" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.perNombres}"/>
+                                    </p:column>
+                                    <p:column headerText="Apellidos" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.perApellidos}"/>
+                                    </p:column>
+                                    <p:column headerText="DNI" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.perDni}"/>
+                                    </p:column>
+                                    <p:column headerText="Fecha Nac" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.perFechaNac}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column headerText="Direccion" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.perDireccion}"/>
+                                    </p:column>
+                                    <p:column headerText="Email" style="width: 100px">
+                                        <p:outputLabel value="#{perfilFormBean.unPerfil.perEmail}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>    
+                </p:dialog>
+                <p:dialog id="dlgBajaPerfil" widgetVar="eliminarPerfil"
+                          header="Baja de Perfil" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarPerfil">
+                        <p:panelGrid id="tblBajaPerfil" columns="2">
+                            <p:outputLabel value="Usuario:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.usuarios.usuNombreUsuario}" />
+                            <p:outputLabel value="Tipo:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.usuarios.usuTipoUsuario}"/>
+                            <p:outputLabel value="Nombres:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.perNombres}"/>
+                            <p:outputLabel value="Apellidos:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.perApellidos}"/>
+                            <p:outputLabel value="DNI:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.perDni}"/>
+                            <p:outputLabel value="Fecha Nacimiento:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.perFechaNac}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                            <p:outputLabel value="E-mail:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.perEmail}"/>
+                            <p:outputLabel value="Direccion:"/>
+                            <p:outputLabel value="#{perfilFormBean.unPerfil.perDireccion}"/>
+                            <p:commandButton id="btnEliminar" value="Eliminar"
+                                             actionListener="#{perfilFormBean.eliminarPerfil()}"
+                                             update=":frmPerfiles"
+                                             oncomplete="PF('eliminarPerfil').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Perfil?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaPerfil" value="Salir"
+                                             oncomplete="PF('eliminarPerfil').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaPerfil" widgetVar="agregarPerfil"
+                          header="Alta de Perfil" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaPerfil" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaPerfil">
+                        <p:panelGrid id="tblAltaPerfil" columns="2">
+                            <p:outputLabel for="txtNombreUser" value="Usuario:"/>
+                            <p:inputText id="txtNombreUser" value="#{perfilFormBean.nombreUs}" required="true"/>
+                            <p:outputLabel for="txtPassword" value="Contraseña:"/>
+                            <p:inputText id="txtPassword" value="#{perfilFormBean.passUs}" required="true"/>
+                            <p:outputLabel for="txtTipo" value="Tipo:"/>
+                            <p:selectOneMenu id="txtTipo" value="#{perfilFormBean.tipo}" required="true">
+                                <f:selectItem itemLabel="Seleccionar Tipo" itemValue=""/>
+                                <f:selectItem itemLabel="Final" itemValue="final"/>
+                                <f:selectItem itemLabel="Administrador" itemValue="administrador"/>
+                                <f:selectItem itemLabel="Supervisor" itemValue="supervisor"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtNombres" value="Nombres:"/>
+                            <p:inputText id="txtNombres" value="#{perfilFormBean.nombres}" required="true"/>
+                            <p:outputLabel for="txtApellidos" value="Apellidos:"/>
+                            <p:inputText id="txtApellidos" value="#{perfilFormBean.apellidos}"/>
+                            <p:outputLabel for="txtDNI" value="DNI:"/>
+                            <p:inputText id="txtDNI" value="#{perfilFormBean.dni}" required="true"/>
+                            <p:outputLabel for="txtFechaNac" value="Fecha Nacimiento:"/>
+                            <p:calendar id="txtFechaNac" value="#{perfilFormBean.fechaNac}" required="true" readonlyInput="true"/>
+                            <p:outputLabel for="txtEmail" value="E-mail:"/>
+                            <p:inputText id="txtEmail" value="#{perfilFormBean.mail}" required="true"/>
+                            <p:outputLabel for="txtDir" value="Direccion:"/>
+                            <p:inputText id="txtDir" value="#{perfilFormBean.direccion}" required="true"/>
+                            <p:commandButton id="btnAgregarUser" value="Agregar"
+                                             actionListener="#{perfilFormBean.agregarPerfil()}"
+                                             update=":frmPerfiles :mensajesAltaPerfil"
+                                             oncomplete="PF('agregarPerfil').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Perfil?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaPerfil" value="Salir"
+                                             oncomplete="PF('agregarPerfil').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarPerfil" widgetVar="modificarPerfil"
+                          header="Modificacion de Perfil" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarPerfil">
+                        <p:panelGrid id="pnlModificarPerfil" columns="2">
+                            <p:outputLabel for="NombreUser" value="Nombre Usuario:"/>
+                            <p:inputText id="NombreUser" value="#{perfilFormBean.unPerfil.usuarios.usuNombreUsuario}" required="true"/>
+                            <p:outputLabel for="Password" value="Contraseña:"/>
+                            <p:inputText id="Password" value="#{perfilFormBean.unPerfil.usuarios.usuPassword}" required="true"/>
+                            <p:outputLabel for="txtNombres" value="Nombres:"/>
+                            <p:inputText id="txtNombres" value="#{perfilFormBean.unPerfil.perNombres}" required="true"/>
+                            <p:outputLabel for="Apellidos" value="Apellidos:"/>
+                            <p:inputText id="Apellidos" value="#{perfilFormBean.unPerfil.perApellidos}" required="true"/>
+                            <p:outputLabel for="DNI" value="DNI:"/>
+                            <p:inputText id="DNI" value="#{perfilFormBean.unPerfil.perDni}" required="true"/>
+                            <p:outputLabel for="FechaNac" value="Fecha Nacimiento:"/>
+                            <p:calendar id="FechaNac" value="#{perfilFormBean.unPerfil.perFechaNac}" required="true" readonlyInput="true"/>
+                            <p:outputLabel for="Email" value="E-mail:"/>
+                            <p:inputText id="Email" value="#{perfilFormBean.unPerfil.perEmail}" required="true"/>
+                            <p:outputLabel for="Dir" value="Direccion:"/>
+                            <p:inputText id="Dir" value="#{perfilFormBean.unPerfil.perDireccion}" required="true"/>
+                            <p:commandButton id="btnModificarPerfil" value="Modificiar"
+                                             actionListener="#{perfilFormBean.modificarPerfil()}"
+                                             update=":frmPerfiles"
+                                             oncomplete="PF('modificarPerfil').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Perfil?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarPerfil" value="Salir"
+                                             oncomplete="PF('modificarPerfil').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                
+                <p:confirmDialog id="confirmarcionDialogoPerfil"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionPerfil">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

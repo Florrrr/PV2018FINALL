@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 14/06/2018 11:42:49 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="cine" name="aplicacion.modelo.dominio.ButacaCartelera" optimistic-lock="version" table="butacas_carteleras">
+    <id name="bcCodigo" type="java.lang.Integer">
+      <column name="bc_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <property name="bcIdentificadorButaca" type="string">
+      <column length="10" name="bc_identificador_butaca" not-null="true"/>
+    </property>
+    <property name="bcDisponible" type="boolean">
+      <column name="bc_disponible" not-null="true"/>
+    </property>
+    <property name="bcEstado" type="boolean">
+      <column name="bc_estado" not-null="true"/>
+    </property>
+    <many-to-one class="aplicacion.modelo.dominio.Cartelera" fetch="join" name="carteleras">
+      <column name="bc_cartelera" not-null="true"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>
+
+
+
+

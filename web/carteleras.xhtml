@@ -1,0 +1,341 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlCartelera" header="Cartelera">
+                    <h:form id="frmCarteleraF" rendered="#{loginFormBean.verificarSesion() eq 1}">
+                        <h:panelGrid id="tblMuestraCartelera" columns="5">
+                            <p:dataTable id="dtTblSala" value="#{carteleraFormBean.listaCartelera}"
+                                         var="cadaCartelera" emptyMessage="No hay carteleras actualmente">
+                                <p:column headerText="Pelicula">
+                                    <p:outputLabel value="#{cadaCartelera.peliculas.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Sala">
+                                    <p:outputLabel value="#{cadaCartelera.salas.salNombre}"/>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <p:outputLabel value="#{cadaCartelera.carFecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Horario">
+                                    <p:outputLabel value="#{cadaCartelera.carHorario}"/>
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <p:outputLabel value="#{cadaCartelera.carPrecio}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="frmCarteleraS" rendered="#{loginFormBean.verificarSesion() eq 2}">
+                        <h:panelGrid id="tblMuestraCartelera" columns="5">
+                            <p:dataTable id="dtTblSala" value="#{carteleraFormBean.listaCartelera}"
+                                         var="cadaCartelera" emptyMessage="No hay carteleras disponibles">
+                                <p:column headerText="Pelicula">
+                                    <p:outputLabel value="#{cadaCartelera.peliculas.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Sala">
+                                    <p:outputLabel value="#{cadaCartelera.salas.salNombre}"/>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <p:outputLabel value="#{cadaCartelera.carFecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Horario">
+                                    <p:outputLabel value="#{cadaCartelera.carHorario}"/>
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <p:outputLabel value="#{cadaCartelera.carPrecio}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarCartelera').show()"
+                                                     update=":frmCarteleraS :frmModificarCartelera"
+                                                     actionListener="#{carteleraFormBean.establecer(cadaCartelera)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarCartelera').show()"
+                                                     update=":frmCarteleraS :frmEliminarCartelera"
+                                                     actionListener="#{carteleraFormBean.establecer(cadaCartelera)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="frmCarteleraA" rendered="#{loginFormBean.verificarSesion() eq 3}">
+                        <p:panelGrid id="tblBotonesCartelera" columns="2">
+                            <p:commandButton id="btnAgregarCartelera" value="Agregar"
+                                             oncomplete="PF('agregarCartelera').show()"
+                                             update="tblMuestraCartelera"/>
+                            <p:commandButton id="btnBuscarCartelera" value="Buscar"
+                                             oncomplete="PF('buscarCartelera').show()"
+                                             update="tblMuestraCartelera"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraCartelera" columns="5">
+                            <p:dataTable id="dtTblSala" value="#{carteleraFormBean.listaCartelera}"
+                                         var="cadaCartelera" emptyMessage="No hay carteleras disponibles">
+                                <p:column headerText="Pelicula">
+                                    <p:outputLabel value="#{cadaCartelera.peliculas.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Sala">
+                                    <p:outputLabel value="#{cadaCartelera.salas.salNombre}"/>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <p:outputLabel value="#{cadaCartelera.carFecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Horario">
+                                    <p:outputLabel value="#{cadaCartelera.carHorario}"/>
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <p:outputLabel value="#{cadaCartelera.carPrecio}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarCartelera').show()"
+                                                     update=":frmCarteleraA :frmModificarCartelera"
+                                                     actionListener="#{carteleraFormBean.establecer(cadaCartelera)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarCartelera').show()"
+                                                     update=":frmCarteleraA :frmEliminarCartelera"
+                                                     actionListener="#{carteleraFormBean.establecer(cadaCartelera)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarCartelera"
+                              widgetVar="buscarCartelera"
+                              header="Buscar Cartelera"
+                              resizable="false"
+                              showEffect="explode"
+                              width="1000"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarCartelera">
+                            <p:panelGrid id="tblBuscarCartelera" columns="1">
+                                <h:panelGrid id="BuscarCartelera" columns="2">
+                                    <p:outputLabel for="codigoCartelera" value="Pelicula Buscada:"/>
+                                    <p:selectOneMenu id="codigoCartelera" required="true" value="#{carteleraFormBean.buscPelicula}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="Seleccione Pelicula" itemValue="#{null}"/>
+                                        <f:selectItems value="#{peliculaFormBean.listaPeliculas}"
+                                                       var="cadaPelicula" itemLabel="#{cadaPelicula.pelNombre}" 
+                                                       itemValue="#{cadaPelicula}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="fechaBuscada" value="Fecha de Cartelera:"/>
+                                    <p:calendar id="fechaBuscada" value="#{carteleraFormBean.fechaBusc}" required="true" readonlyInput="true"/>
+                                    <p:commandButton id="btnBuscarCartelera" value="Buscar"
+                                                     update=":frmBuscarCartelera"
+                                                     actionListener="#{carteleraFormBean.buscar()}"/>
+                                    <p:commandButton id="btnCerrarBuscarCartelera" value="Salir"
+                                                     oncomplete="PF('buscarCartelera').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbCarteleraBuscadx" value="#{carteleraFormBean.unaCartelera}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{carteleraFormBean.unaCartelera.carCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Pelicula">
+                                        <p:outputLabel value="#{carteleraFormBean.unaCartelera.peliculas.pelNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Sala">
+                                        <p:outputLabel value="#{carteleraFormBean.unaCartelera.salas.salNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Fecha">
+                                        <p:outputLabel value="#{carteleraFormBean.unaCartelera.carFecha}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                    <p:column headerText="Horario">
+                                        <p:outputLabel value="#{carteleraFormBean.unaCartelera.carHorario}"/>
+                                    </p:column>
+                                    <p:column headerText="Precio">
+                                        <p:outputLabel value="#{carteleraFormBean.unaCartelera.carPrecio}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgBajaCartelera" widgetVar="eliminarCartelera"
+                          header="Baja de Cartelera" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarCartelera">
+                        <h:panelGrid id="tblBajaCartelera" columns="2">
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{carteleraFormBean.unaCartelera.carCodigo}"/>
+                            <p:outputLabel value="Pelicula:"/>
+                            <p:outputLabel value="#{carteleraFormBean.unaCartelera.peliculas.pelNombre}"/>
+                            <p:outputLabel value="Sala:"/>
+                            <p:outputLabel value="#{carteleraFormBean.unaCartelera.salas.salNombre}"/>
+                            <p:outputLabel value="Fecha:"/>
+                            <p:outputLabel value="#{carteleraFormBean.unaCartelera.carFecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </p:outputLabel>
+                            <p:outputLabel value="Horario:"/>
+                            <p:outputLabel value="#{carteleraFormBean.unaCartelera.carHorario}"/>
+                            <p:outputLabel value="Precio:"/>
+                            <p:outputLabel value="#{carteleraFormBean.unaCartelera.carPrecio}"/>
+                            <p:commandButton id="btnEliminarCartelera" value="Eliminar"
+                                             actionListener="#{carteleraFormBean.eliminar()}"
+                                             update=":frmCarteleraA :frmCarteleraS"
+                                             oncomplete="PF('eliminarCartelera').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Cartelera?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaCartelera" value="Salir"
+                                             oncomplete="PF('eliminarCartelera').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaCartelera" widgetVar="agregarCartelera"
+                          header="Alta de Cartelera" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaCartelera" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaCartelera">
+                        <p:panelGrid id="tblAltaCartelera" columns="2">
+                            <p:outputLabel for="txtPelicula" value="Pelicula:"/>
+                            <p:selectOneMenu id="txtPelicula" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{carteleraFormBean.unaPelicula}">
+                                <f:selectItem itemLabel="Seleccione Pelicula" itemValue="#{null}"/>
+                                <f:selectItems value="#{peliculaFormBean.listaPeliculas}"
+                                               var="cadaPelicula" itemLabel="#{cadaPelicula.pelNombre}" itemValue="#{cadaPelicula}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtSala" value="Sala:"/>
+                            <p:selectOneMenu id="txtSala" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{carteleraFormBean.unaSala}">
+                                <f:selectItem itemLabel="Seleccione Sala" itemValue="#{null}"/>
+                                <f:selectItems value="#{salaFormBean.listaSala}"
+                                               var="cadaSala" itemLabel="#{cadaSala.salNombre}" itemValue="#{cadaSala}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtFecha" value="Fecha:"/>
+                            <p:calendar id="txtFecha" value="#{carteleraFormBean.fecha}" required="true" readonlyInput="true"/>
+                            <p:outputLabel for="txtHorario" value="Horario:"/>
+                            <p:selectOneMenu id="txtHorario" required="true" value="#{carteleraFormBean.horario}">
+                                <f:selectItem itemLabel="03:00 pm" itemValue="03:00 pm"/>
+                                <f:selectItem itemLabel="05:00 pm" itemValue="05:00 pm"/>
+                                <f:selectItem itemLabel="08:00 pm" itemValue="08:00 pm"/>
+                                <f:selectItem itemLabel="09:30 pm" itemValue="09:30 pm"/>
+                                <f:selectItem itemLabel="10:30 pm" itemValue="10:30 pm"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtPrecio" value="Precio:"/>
+                            <p:selectOneMenu id="txtPrecio" required="true" value="#{carteleraFormBean.precio}">
+                                <f:selectItem itemLabel="Solo" itemValue="200"/>
+                                <f:selectItem itemLabel="Combo 2" itemValue="350"/>
+                                <f:selectItem itemLabel="Familiar" itemValue="500"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="btnAgregarCarteler" value="Agregar"
+                                             actionListener="#{carteleraFormBean.agregar()}"
+                                             update=":frmCarteleraA :frmCarteleraS :mensajesAltaCartelera"
+                                             oncomplete="PF('agregarCartelera').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Cartelera?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaCartelera" value="Salir"
+                                             oncomplete="PF('agregarCartelera').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarCartelera" widgetVar="modificarCartelera"
+                          header="Modificacion de Cartelera" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarCartelera">
+                        <p:panelGrid id="pnlModificarCartelera" columns="2">
+                            <p:outputLabel for="txtPelicula" value="Pelicula:"/>
+                            <p:selectOneMenu id="txtPelicula" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{carteleraFormBean.unaCartelera.peliculas}">
+                                <f:selectItem itemLabel="Seleccione Pelicula" itemValue="#{null}"/>
+                                <f:selectItems value="#{peliculaFormBean.listaPeliculas}"
+                                               var="cadaPelicula" itemLabel="#{cadaPelicula.pelNombre}" itemValue="#{cadaPelicula}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtSala" value="Sala:"/>
+                            <p:selectOneMenu id="txtSala" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{carteleraFormBean.unaCartelera.salas}">
+                                <f:selectItem itemLabel="Seleccione Sala" itemValue="#{null}"/>
+                                <f:selectItems value="#{salaFormBean.listaSala}"
+                                               var="cadaSala" itemLabel="#{cadaSala.salNombre}" itemValue="#{cadaSala}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtFecha" value="Fecha:"/>
+                            <p:calendar id="txtFecha" value="#{carteleraFormBean.unaCartelera.carFecha}" required="true" readonlyInput="true"/>
+                            <p:outputLabel for="txtHorario" value="Horario:"/>
+                            <p:selectOneMenu id="txtHorario" required="true" value="#{carteleraFormBean.unaCartelera.carHorario}">
+                                <f:selectItem itemLabel="03:00 pm" itemValue="03:00 pm"/>
+                                <f:selectItem itemLabel="05:00 pm" itemValue="05:00 pm"/>
+                                <f:selectItem itemLabel="08:00 pm" itemValue="08:00 pm"/>
+                                <f:selectItem itemLabel="09:30 pm" itemValue="09:30 pm"/>
+                                <f:selectItem itemLabel="10:30 pm" itemValue="10:30 pm"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtPrecio" value="Precio:"/>
+                            <p:selectOneMenu id="txtPrecio" required="true" value="#{carteleraFormBean.unaCartelera.carPrecio}">
+                                <f:selectItem itemLabel="Solo" itemValue="200"/>
+                                <f:selectItem itemLabel="Combo 2" itemValue="350"/>
+                                <f:selectItem itemLabel="Familiar" itemValue="500"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="btnModificarCartelera" value="Modificiar"
+                                             actionListener="#{carteleraFormBean.modificar()}"
+                                             update=":frmCarteleraA :frmCarteleraS"
+                                             oncomplete="PF('modificarCartelera').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Cartelera?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarCartelera" value="Salir"
+                                             oncomplete="PF('modificarCartelera').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>             
+                <p:confirmDialog id="confirmarcionDialogoCartelera"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionCartelera">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

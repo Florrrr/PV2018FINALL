@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlButaca" header="Butacas">
+                    <h:form id="frmButaca">
+                        <p:panelGrid id="tblBotonesButaca" columns="2">
+                            <p:commandButton id="btnAgregarButaca" value="Agregar"
+                                             oncomplete="PF('agregarButaca').show()"
+                                             update="tblMuestraButaca"/>
+                            <p:commandButton id="btnBuscarButaca" value="Buscar"
+                                             oncomplete="PF('buscarButaca').show()"
+                                             update="tblMuestraButaca"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraButaca" columns="5">
+                            <p:dataTable id="dtTblButaca" value="#{butacaFormBean.listaButaca}"
+                                         var="cadaButaca" emptyMessage="No hay butacas en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaButaca.butCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Sala">
+                                    <p:outputLabel value="#{cadaButaca.salas.salNombre}"/>
+                                </p:column>
+                                <p:column headerText="Identificador">
+                                    <p:outputLabel value="#{cadaButaca.butIdentificador}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarButaca').show()"
+                                                     update=":frmButaca :frmModificarButaca"
+                                                     actionListener="#{butacaFormBean.establecer(cadaButaca)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarButaca').show()"
+                                                     update=":frmButaca :frmEliminarButaca"
+                                                     actionListener="#{butacaFormBean.establecer(cadaButaca)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarButaca"
+                              widgetVar="buscarButaca"
+                              header="Buscar Butaca"
+                              resizable="false"
+                              showEffect="explode"
+                              width="500"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarButaca">
+                            <p:panelGrid id="tblBuscarButaca" columns="1">
+                                <h:panelGrid id="BuscarButaca" columns="4">
+                                    <p:outputLabel for="codigoButaca" value="Codigo de Butaca:"/>
+                                    <p:inputText id="codigoButaca" required="true"
+                                                 value="#{butacaFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarButaca" value="Buscar"
+                                                     update=":frmBuscarButaca"
+                                                     actionListener="#{butacaFormBean.buscar()}"/>
+                                    <p:commandButton id="btnCerrarBuscarButaca" value="Salir"
+                                                     oncomplete="PF('buscarButaca').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbButacaBuscadx" value="#{butacaFormBean.unaButaca}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{butacaFormBean.unaButaca.butCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Sala" style="width: 100px">
+                                        <p:outputLabel value="#{butacaFormBean.unaButaca.salas.salNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Identificador" style="width: 100px">
+                                        <p:outputLabel value="#{butacaFormBean.unaButaca.butIdentificador}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgBajaButaca" widgetVar="eliminarButaca"
+                          header="Baja de Butaca" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarButaca">
+                        <p:panelGrid id="tblBajaButaca" columns="2">
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{butacaFormBean.unaButaca.butCodigo}"/>
+                            <p:outputLabel value="Sala:"/>
+                            <p:outputLabel value="#{butacaFormBean.unaButaca.salas.salNombre}"/>
+                            <p:outputLabel value="Identificador:"/>
+                            <p:outputLabel value="#{butacaFormBean.unaButaca.butIdentificador}"/>
+                            <p:commandButton id="btnEliminarButaca" value="Eliminar"
+                                             actionListener="#{butacaFormBean.eliminar()}"
+                                             update=":frmButaca"
+                                             oncomplete="PF('eliminarButaca').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Butaca?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaButaca" value="Salir"
+                                             oncomplete="PF('eliminarButaca').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaButaca" widgetVar="agregarButaca"
+                          header="Alta de Butaca" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaButaca" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaButaca">
+                        <p:panelGrid id="tblAltaButaca" columns="2">
+                            <p:outputLabel for="txtNomSala" value="Sala:"/>
+                            <p:selectOneMenu id="txtNomSala" converter="omnifaces.SelectItemsConverter"
+                                             value="#{butacaFormBean.unaSala}">
+                                <f:selectItem itemLabel="Seleccione Sala" itemValue="#{null}"/>
+                                <f:selectItems value="#{salaFormBean.listaSala}"
+                                               var="cadaSala" itemLabel="#{cadaSala.salNombre}" itemValue="#{cadaSala}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtIdButaca" value="Identificador:"/>
+                            <p:inputText id="txtIdButaca" value="#{butacaFormBean.id}" required="true"/>
+                            <p:commandButton id="btnAgregarButaca" value="Agregar"
+                                             actionListener="#{butacaFormBean.agregar()}"
+                                             update=":frmButaca :mensajesAltaButaca"
+                                             oncomplete="PF('agregarButaca').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Butaca?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaButaca" value="Salir"
+                                             oncomplete="PF('agregarButaca').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarButaca" widgetVar="modificarButaca"
+                          header="Modificacion de Butaca" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarButaca">
+                        <p:panelGrid id="pnlModificarButaca" columns="2">
+                            <p:outputLabel for="txtSalas" value="Sala:"/>
+                            <p:selectOneMenu id="txtSalas" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{butacaFormBean.unaButaca.salas}">
+                                <f:selectItem itemLabel="Seleccione Sala" itemValue="#{null}"/>
+                                <f:selectItems value="#{salaFormBean.listaSala}"
+                                               var="cadaSala" itemLabel="#{cadaSala.salNombre}" itemValue="#{cadaSala}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="idBut" value="Identificador:"/>
+                            <p:inputText id="idBut" value="#{butacaFormBean.unaButaca.butIdentificador}" required="true"/>
+                            <p:commandButton id="btnModificarButaca" value="Modificiar"
+                                             actionListener="#{butacaFormBean.modificar()}"
+                                             update=":frmButaca"
+                                             oncomplete="PF('modificarButaca').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Butaca?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarButaca" value="Salir"
+                                             oncomplete="PF('modificarButaca').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>             
+                <p:confirmDialog id="confirmarcionDialogoButaca"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionButaca">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

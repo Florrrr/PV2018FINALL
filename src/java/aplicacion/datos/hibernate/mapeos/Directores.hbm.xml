@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 14/06/2018 11:42:49 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="cine" name="aplicacion.modelo.dominio.Director" optimistic-lock="version" table="directores">
+    <id name="dirCodigo" type="java.lang.Integer">
+      <column name="dir_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <property name="dirApellidos" type="string">
+      <column length="45" name="dir_apellidos" not-null="true"/>
+    </property>
+    <property name="dirNombres" type="string">
+      <column length="45" name="dir_nombres" not-null="true"/>
+    </property>
+    <property name="dirEstado" type="boolean">
+      <column name="dir_estado" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

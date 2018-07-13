@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 14/06/2018 11:42:49 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class catalog="cine" name="aplicacion.modelo.dominio.Perfil" optimistic-lock="version" table="perfiles">
+        <id name="perCodigo" type="java.lang.Integer">
+      <column name="per_codigo"/>
+      <generator class="identity"/>
+        </id>
+        <many-to-one class="aplicacion.modelo.dominio.Usuario"
+                     fetch="join" name="usuarios" cascade="all">
+            <column name="per_usuario" not-null="true"/>
+        </many-to-one>
+        <property name="perNombres" type="string">
+      <column length="45" name="per_nombres" not-null="true"/>
+    </property>
+    <property name="perApellidos" type="string">
+      <column length="45" name="per_apellidos" not-null="true"/>
+    </property>
+    <property name="perDni" type="string">
+      <column length="8" name="per_dni" not-null="true" unique="true"/>
+    </property>
+    <property name="perFechaNac" type="date">
+      <column length="10" name="per_fecha_nac" not-null="true"/>
+    </property>
+    <property name="perEmail" type="string">
+      <column length="80" name="per_email" not-null="true"/>
+    </property>
+    <property name="perDireccion" type="string">
+      <column length="45" name="per_direccion" not-null="true"/>
+    </property>
+    <property name="perEstado" type="boolean">
+      <column name="per_estado" not-null="true"/>
+    </property>
+    </class>
+</hibernate-mapping>

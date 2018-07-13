@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlSala" header="Salas">
+                    <h:form id="frmSala">
+                        <p:panelGrid id="tblBotonesSala" columns="2">
+                            <p:commandButton id="btnAgregarSala" value="Agregar"
+                                             oncomplete="PF('agregarSala').show()"
+                                             update="tblMuestraSala"/>
+                            <p:commandButton id="btnBuscarSala" value="Buscar"
+                                             oncomplete="PF('buscarSala').show()"
+                                             update="tblMuestraSala"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraSala" columns="5">
+                            <p:dataTable id="dtTblSala" value="#{salaFormBean.listaSala}"
+                                         var="cadaSala" emptyMessage="No hay salas en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaSala.salCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{cadaSala.salNombre}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <p:outputLabel value="#{cadaSala.salDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarSala').show()"
+                                                     update=":frmSala :frmModificarSala"
+                                                     actionListener="#{salaFormBean.establecer(cadaSala)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarSala').show()"
+                                                     update=":frmSala :frmEliminarSala"
+                                                     actionListener="#{salaFormBean.establecer(cadaSala)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarSala"
+                              widgetVar="buscarSala"
+                              header="Buscar Sala"
+                              resizable="false"
+                              showEffect="explode"
+                              width="500"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarSala">
+                            <p:panelGrid id="tblBuscarSala" columns="1">
+                                <h:panelGrid id="BuscarSala" columns="4">
+                                    <p:outputLabel for="codigoSala" value="Codigo de Sala:"/>
+                                    <p:inputText id="codigoSala" required="true"
+                                                 value="#{salaFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarSal" value="Buscar"
+                                                     update=":frmBuscarSala"
+                                                     actionListener="#{salaFormBean.buscar()}"/>
+                                    <p:commandButton id="btnCerrarBuscarSala" value="Salir"
+                                                     oncomplete="PF('buscarSala').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbSalaBuscadx" value="#{salaFormBean.unaSala}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{salaFormBean.unaSala.salCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre" style="width: 100px">
+                                        <p:outputLabel value="#{salaFormBean.unaSala.salNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" style="width: 100px">
+                                        <p:outputLabel value="#{salaFormBean.unaSala.salDescripcion}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgBajaSala" widgetVar="eliminarSala"
+                          header="Baja de Sala" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarSala">
+                        <p:panelGrid id="tblBajaSala" columns="2">
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{salaFormBean.unaSala.salCodigo}" />
+                            <p:outputLabel value="Nombre:"/>
+                            <p:outputLabel value="#{salaFormBean.unaSala.salNombre}" />
+                            <p:outputLabel value="Descripcion:"/>
+                            <p:outputLabel value="#{salaFormBean.unaSala.salDescripcion}"/>
+                            <p:commandButton id="btnEliminarSala" value="Eliminar"
+                                             actionListener="#{salaFormBean.eliminar()}"
+                                             update=":frmSala"
+                                             oncomplete="PF('eliminarSala').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Sala?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaSala" value="Salir"
+                                             oncomplete="PF('eliminarSala').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaSala" widgetVar="agregarSala"
+                          header="Alta de Sala" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaSala" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaSala">
+                        <p:panelGrid id="tblAltaSala" columns="2">
+                            <p:outputLabel for="txtNomSala" value="Nombre:"/>
+                            <p:inputText id="txtNomSala" value="#{salaFormBean.nombre}" required="true"/>
+                            <p:outputLabel for="txtDescSala" value="Descripcion:"/>
+                            <p:inputText id="txtDescSala" value="#{salaFormBean.desc}" required="true"/>
+                            <p:commandButton id="btnAgregarSal" value="Agregar"
+                                             actionListener="#{salaFormBean.agregar()}"
+                                             update=":frmSala :mensajesAltaSala"
+                                             oncomplete="PF('agregarSala').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Sala?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaSala" value="Salir"
+                                             oncomplete="PF('agregarSala').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarSala" widgetVar="modificarSala"
+                          header="Modificacion de Sala" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarSala">
+                        <p:panelGrid id="pnlModificarSala" columns="2">
+                            <p:outputLabel for="nomSal" value="Sala:"/>
+                            <p:inputText id="nomSal" value="#{salaFormBean.unaSala.salNombre}" required="true"/>
+                            <p:outputLabel for="descSal" value="Descripcion:"/>
+                            <p:inputText id="descSal" value="#{salaFormBean.unaSala.salDescripcion}" required="true"/>
+                            <p:commandButton id="btnModificarSala" value="Modificiar"
+                                             actionListener="#{salaFormBean.modificar()}"
+                                             update=":frmSala"
+                                             oncomplete="PF('modificarSala').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Sala?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarSala" value="Salir"
+                                             oncomplete="PF('modificarSala').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>             
+                <p:confirmDialog id="confirmarcionDialogoSala"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionSala">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlPeliculas" header="Peliculas">
+                    <h:form id="frmPeliculasA" rendered="#{loginFormBean.verificarSesion() eq 2}">
+                        <p:panelGrid id="tblBotonesPelicula" columns="2">
+                            <p:commandButton id="btnAgregarPelicula" value="Conectar"
+                                             oncomplete="PF('agregarPelicula').show()"
+                                             update="tblMuestraPeliculas"/>
+                            <p:commandButton id="btnBuscarPelicula" value="Buscar"
+                                             oncomplete="PF('buscarPelicula').show()"
+                                             update="tblMuestraPeliculas"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraPeliculas" columns="5">
+                            <p:dataTable id="dtTblPeliculas" value="#{pelDirFormBean.listaPelDir}"
+                                         var="cadaPelicula" emptyMessage="No hay peliculas en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaPelicula.peliculas.pelCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{cadaPelicula.peliculas.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Director">
+                                    <p:outputLabel value="#{cadaPelicula.directores.dirApellidos} #{cadaPelicula.directores.dirNombres}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <p:outputLabel value="#{cadaPelicula.peliculas.pelDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarPelicula').show()"
+                                                     update=":frmPeliculasA :frmModificarPelicula"
+                                                     actionListener="#{peliculaFormBean.establecerPelicula(cadaPelicula)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarPelicula').show()"
+                                                     update=":frmPeliculasA :frmEliminarPelicula"
+                                                     actionListener="#{peliculaFormBean.establecerPelicula(cadaPelicula)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="frmPeliculasS" rendered="#{loginFormBean.verificarSesion() eq 3}">
+                        <p:panelGrid id="tblBotonesPelicula" columns="2">
+                            <p:commandButton id="btnAgregarPelicula" value="Agregar"
+                                             oncomplete="PF('agregarPelicula').show()"
+                                             update="tblMuestraPeliculas"/>
+                            <p:commandButton id="btnBuscarPelicula" value="Buscar"
+                                             oncomplete="PF('buscarPelicula').show()"
+                                             update="tblMuestraPeliculas"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraPeliculas" columns="5">
+                            <p:dataTable id="dtTblPeliculas" value="#{peliculaFormBean.listaPeliculas}"
+                                         var="cadaPelicula" emptyMessage="No hay peliculas en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaPelicula.pelCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{cadaPelicula.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <p:outputLabel value="#{cadaPelicula.pelDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarPelicula').show()"
+                                                     update=":frmPeliculasS :frmModificarPelicula"
+                                                     actionListener="#{peliculaFormBean.establecerPelicula(cadaPelicula)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarPelicula').show()"
+                                                     update=":frmPeliculasS :frmEliminarPelicula"
+                                                     actionListener="#{peliculaFormBean.establecerPelicula(cadaPelicula)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarPelicula"
+                              widgetVar="buscarPelicula"
+                              header="Buscar Pelicula"
+                              resizable="false"
+                              showEffect="explode"
+                              width="500"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarPelicula">
+                            <p:panelGrid id="tblBuscarPelicula" columns="1">
+                                <h:panelGrid id="BuscarPelicula" columns="4">
+                                    <p:outputLabel for="codigoPelicula" value="Codigo de Pelicula:"/>
+                                    <p:inputText id="codigoPelicula" required="true"
+                                                 value="#{peliculaFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarPelicula" value="Buscar"
+                                                     update=":frmBuscarPelicula"
+                                                     actionListener="#{peliculaFormBean.buscarPelicula()}"/>
+                                    <p:commandButton id="btnCerrarBuscarPelicula" value="Salir"
+                                                     oncomplete="PF('buscarPelicula').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbPeliculaBuscada" value="#{peliculaFormBean.unaPelicula}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{peliculaFormBean.unaPelicula.pelCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre" style="width: 100px">
+                                        <p:outputLabel value="#{peliculaFormBean.unaPelicula.pelNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" style="width: 100px">
+                                        <p:outputLabel value="#{peliculaFormBean.unaPelicula.pelDescripcion}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>    
+                </p:dialog>
+                <p:dialog id="dlgBajaPelicula" widgetVar="eliminarPelicula"
+                          header="Baja de Pelicula" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarPelicula">
+                        <p:panelGrid id="tblBajaPelicula" columns="2">
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{peliculaFormBean.unaPelicula.pelCodigo}" />
+                            <p:outputLabel value="Nombre:"/>
+                            <p:outputLabel value="#{peliculaFormBean.unaPelicula.pelNombre}"/>
+                            <p:outputLabel value="Descripcion:"/>
+                            <p:outputLabel value="#{peliculaFormBean.unaPelicula.pelDescripcion}"/>
+                            <p:commandButton id="btnEliminarPelicula" value="Eliminar"
+                                             actionListener="#{peliculaFormBean.eliminarPelicula()}"
+                                             update=":frmPeliculasS :frmPeliculasA"
+                                             oncomplete="PF('eliminarPelicula').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Pelicula?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaPelicula" value="Salir"
+                                             oncomplete="PF('eliminarPelicula').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaPelicula" widgetVar="agregarPelicula"
+                          header="Alta de Pelicula" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaPelicula" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaPeliculaS" rendered="#{loginFormBean.verificarSesion() eq 3}">
+                        <p:panelGrid id="tblAltaPelicula" columns="2">
+                            <p:outputLabel for="txtNombrePelicula" value="Nombre:"/>
+                            <p:inputText id="txtNombrePelicula" value="#{peliculaFormBean.nombre}" required="true"/>
+                            <p:outputLabel for="txtDescripcionPelicula" value="Descripcion:"/>
+                            <p:inputText id="txtDescripcionPelicula" value="#{peliculaFormBean.descripcion}" required="true"/>
+                            <p:commandButton id="btnAgregarPelicula" value="Agregar"
+                                             actionListener="#{peliculaFormBean.agregarPelicula()}"
+                                             update=":frmPeliculasS :mensajesAltaPelicula"
+                                             oncomplete="PF('agregarPelicula').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Pelicula?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaPelicula" value="Salir"
+                                             oncomplete="PF('agregarPelicula').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                    <h:form id="frmAltaPeliculaA" rendered="#{loginFormBean.verificarSesion() eq 2}">
+                        <p:panelGrid id="tblAltaPelicula" columns="2">
+                            <p:outputLabel for="txtNombrePelicula" value="Pelicula:"/>
+                            <p:selectOneMenu id="txtNombrePelicula" required="true" value="#{peliculaFormBean.unaPelicula}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="Seleccione Pelicula" itemValue="#{null}"/>
+                                        <f:selectItems value="#{peliculaFormBean.listaPeliculas}"
+                                                       var="cadaPel" itemLabel="#{cadaPel.pelNombre}" 
+                                                       itemValue="#{cadaPel}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="director" value="Director:"/>
+                            <p:selectOneMenu id="director" required="true" value="#{peliculaFormBean.unDirector}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="Seleccione Director" itemValue="#{null}"/>
+                                        <f:selectItems value="#{directorFormBean.listaDirectores}"
+                                                       var="cadaDirector" itemLabel="#{cadaDirector.dirApellidos}" 
+                                                       itemValue="#{cadaDirector}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="clasificaciones" value="Clasificacion:"/>
+                            <p:selectOneMenu id="clasificaciones" required="true" value="#{peliculaFormBean.unaClasificacion}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItem itemLabel="Seleccione Clasificacion" itemValue="#{null}"/>
+                                        <f:selectItems value="#{clasificacionFormBean.listaClasificacion}"
+                                                       var="cadaCla" itemLabel="#{cadaCla.claDescripcion}" 
+                                                       itemValue="#{cadaCla}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="btnAgregarPelicula" value="Conectar"
+                                             actionListener="#{peliculaFormBean.conectar()}"
+                                             update=":frmPeliculasA :mensajesAltaPelicula"
+                                             oncomplete="PF('agregarPelicula').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Pelicula?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaPelicula" value="Salir"
+                                             oncomplete="PF('agregarPelicula').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarPelicula" widgetVar="modificarPelicula"
+                          header="Modificacion de Pelicula" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarPelicula">
+                        <p:panelGrid id="pnlModificarPelicula" columns="2">
+                            <p:outputLabel for="NombrePelicula" value="Nombre:"/>
+                            <p:inputText id="NombrePelicula" value="#{peliculaFormBean.unaPelicula.pelNombre}" required="true"/>
+                            <p:outputLabel for="DescPelicula" value="Descripcion:"/>
+                            <p:inputText id="DescPelicula" value="#{peliculaFormBean.unaPelicula.pelDescripcion}" required="true"/>
+                            <p:commandButton id="btnModificarPelicula" value="Modificiar"
+                                             actionListener="#{peliculaFormBean.modificarPelicula()}"
+                                             update=":frmPeliculasA"
+                                             oncomplete="PF('modificarPelicula').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Pelicula?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarPelicula" value="Salir"
+                                             oncomplete="PF('modificarPelicula').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>             
+                <p:confirmDialog id="confirmarcionDialogoPelicula"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionPelicula">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

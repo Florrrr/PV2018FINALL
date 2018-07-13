@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 14/06/2018 11:42:49 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="cine" name="aplicacion.modelo.dominio.VentaEntrada" optimistic-lock="version" table="ventas_entradas">
+    <id name="venCodigo" type="java.lang.Integer">
+      <column name="ven_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="aplicacion.modelo.dominio.ButacaCartelera" fetch="join" cascade="all" name="butacasCartelera">
+      <column name="ven_butaca" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="aplicacion.modelo.dominio.Perfil" fetch="join" name="perfiles">
+      <column name="ven_vendedor" not-null="true"/>
+    </many-to-one>
+    <property name="venPrecio" type="string">
+      <column length="45" name="ven_precio" not-null="true"/>
+    </property>
+    <property name="venDescripcion" type="string">
+      <column length="100" name="ven_descripcion" not-null="true"/>
+    </property>
+    <property name="venEstado" type="boolean">
+      <column name="ven_estado" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

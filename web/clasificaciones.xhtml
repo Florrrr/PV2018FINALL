@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlClasificacion" header="Clasificaciones">
+                    <h:form id="frmClasificacion">
+                        <p:panelGrid id="tblBotonesClasificacion" columns="3">
+                            <p:commandButton id="btnAgregarClasificacion" value="Agregar"
+                                             oncomplete="PF('agregarClasificacion').show()"
+                                             update="tblMuestraClasificacion"/>
+                            <p:commandButton id="btnBuscarClasificacion" value="Buscar"
+                                             oncomplete="PF('buscarClasificacion').show()"
+                                             update="tblMuestraClasificacion"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraClasificacion" columns="5">
+                            <p:dataTable id="dtTblClasificacion" value="#{clasificacionFormBean.listaClasificacion}"
+                                         var="cadaClasificacion" emptyMessage="No hay clasificaciones en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaClasificacion.claCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Descripcion">
+                                    <p:outputLabel value="#{cadaClasificacion.claDescripcion}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarClasificacion').show()"
+                                                     update=":frmClasificacion :frmModificarClasificacion"
+                                                     actionListener="#{clasificacionFormBean.establecer(cadaClasificacion)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarClasificacion').show()"
+                                                     update=":frmClasificacion :frmEliminarClasificacion"
+                                                     actionListener="#{clasificacionFormBean.establecer(cadaClasificacion)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarClasificacion"
+                              widgetVar="buscarClasificacion"
+                              header="Buscar Clasificacion"
+                              resizable="false"
+                              showEffect="explode"
+                              width="500"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarClasificacion">
+                            <p:panelGrid id="tblBuscarClasificacion" columns="1">
+                                <h:panelGrid id="BuscarClasificacion" columns="4">
+                                    <p:outputLabel for="codigoClasificacion" value="Codigo de Clasificacion:"/>
+                                    <p:inputText id="codigoClasificacion" required="true"
+                                                 value="#{clasificacionFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarClasi" value="Buscar"
+                                                     update=":frmBuscarClasificacion"
+                                                     actionListener="#{clasificacionFormBean.buscar()}"/>
+                                    <p:commandButton id="btnCerrarBuscarClasificacion" value="Salir"
+                                                     oncomplete="PF('buscarClasificacion').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbClasificacionBuscadx" value="#{clasificacionFormBean.unaClasificacion}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{clasificacionFormBean.unaClasificacion.claCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" style="width: 100px">
+                                        <p:outputLabel value="#{clasificacionFormBean.unaClasificacion.claDescripcion}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgBajaClasificacion" widgetVar="eliminarClasificacion"
+                          header="Baja de Clasificacion" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarClasificacion">
+                        <p:panelGrid id="tblBajaClasificacion" columns="2">
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{clasificacionFormBean.unaClasificacion.claCodigo}" />
+                            <p:outputLabel value="Descripcion:"/>
+                            <p:outputLabel value="#{clasificacionFormBean.unaClasificacion.claDescripcion}"/>
+                            <p:commandButton id="btnEliminarClasificacion" value="Eliminar"
+                                             actionListener="#{clasificacionFormBean.eliminar()}"
+                                             update=":frmClasificacion"
+                                             oncomplete="PF('eliminarClasificacion').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Clasificacion?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaClasificacion" value="Salir"
+                                             oncomplete="PF('eliminarClasificacion').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaClasificacion" widgetVar="agregarClasificacion"
+                          header="Alta de Clasificacion" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaClasificacion" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaClasificacion">
+                        <p:panelGrid id="tblAltaClasificacion" columns="2">
+                            <p:outputLabel for="txtDescClasificacion" value="Descripcion:"/>
+                            <p:inputText id="txtDescClasificacion" value="#{clasificacionFormBean.desc}" required="true"/>
+                            <p:commandButton id="btnAgregarClasi" value="Agregar"
+                                             actionListener="#{clasificacionFormBean.agregar()}"
+                                             update=":frmClasificacion :mensajesAltaClasificacion"
+                                             oncomplete="PF('agregarClasificacion').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Clasificacion?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaClasificacion" value="Salir"
+                                             oncomplete="PF('agregarClasificacion').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarClasificacion" widgetVar="modificarClasificacion"
+                          header="Modificacion de Clasificacion" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarClasificacion">
+                        <p:panelGrid id="pnlModificarClasificacion" columns="2">
+                            <p:outputLabel for="descClasificacion" value="Clasificacion:"/>
+                            <p:inputText id="descClasificacion" value="#{clasificacionFormBean.unaClasificacion.claDescripcion}" required="true"/>
+                            <p:commandButton id="btnModificarClasificacion" value="Modificiar"
+                                             actionListener="#{clasificacionFormBean.modificar()}"
+                                             update=":frmClasificacion"
+                                             oncomplete="PF('modificarClasificacion').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Clasificacion?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarClasificacion" value="Salir"
+                                             oncomplete="PF('modificarClasificacion').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>             
+                <p:confirmDialog id="confirmarcionDialogoClasificacion"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionClasificacion">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

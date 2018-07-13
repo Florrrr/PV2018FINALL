@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Faccelet tittle</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <div id="login">
+                    <p:panel id="pnlLogin" header="Acceso al sistema">
+                        <h:form id="frmLogin">
+                            <p:growl id="msg" showDetail="true" sticky="true"/>
+                            <h:panelGrid id="tblLogin" columns="2" cellpadding="5">
+                                <p:outputLabel for="nameUser" value="Nombre de Usuario: "/>
+                                <p:inputText id="nameUser" value="#{loginFormBean.user}"/>
+                                <p:outputLabel for="passUser" value="Contraseña:"/>
+                                <p:password id="passUser" value="#{loginFormBean.pass}"/>
+                                <p:outputLabel/>
+                                <p:commandButton id="btnIngresar" update="frmLogin" 
+                                                 value="Ingresar" action="#{loginFormBean.validarUsuario()}"/>
+                                <p:outputLabel value="Nuevo en el sistema?"/>
+                                <p:commandButton id="btnRegistrarse" oncomplete="PF('registro').show()"
+                                                 value="Registrarse" rendered="true"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </p:panel>
+                    <p:dialog id="dlgRegistrarse" widgetVar="registro"
+                          header="Unirse al sistema" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                        <h:form id="frmRegistro">
+                        <h:panelGrid id="tblRegistro" columns="2">
+                            <p:outputLabel for="NU" value="Usuario:"/>
+                            <p:inputText id="NU" value="#{perfilFormBean.nombreUs}" required="true"/>
+                            <p:outputLabel for="P" value="Contraseña:"/>
+                            <p:inputText id="P" value="#{perfilFormBean.passUs}" required="true"/>
+                            <p:outputLabel for="T" value="Tipo:"/>
+                            <p:selectOneMenu id="T" value="#{perfilFormBean.tipo}" required="true">
+                                <f:selectItem itemLabel="Final" itemValue="final"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="NP" value="Nombres:"/>
+                            <p:inputText id="NP" value="#{perfilFormBean.nombres}" required="true"/>
+                            <p:outputLabel for="AP" value="Apellidos:"/>
+                            <p:inputText id="AP" value="#{perfilFormBean.apellidos}"/>
+                            <p:outputLabel for="DNIP" value="DNI:"/>
+                            <p:inputText id="DNIP" value="#{perfilFormBean.dni}" required="true"/>
+                            <p:outputLabel for="FN" value="Fecha Nacimiento:"/>
+                            <p:calendar id="FN" value="#{perfilFormBean.fechaNac}" required="true" readonlyInput="true"/>
+                            <p:outputLabel for="CE" value="E-mail:"/>
+                            <p:inputText id="CE" value="#{perfilFormBean.mail}" required="true"/>
+                            <p:outputLabel for="D" value="Direccion:"/>
+                            <p:inputText id="D" value="#{perfilFormBean.direccion}" required="true"/>
+                            <p:commandButton id="btnRegistroUser" value="Registrarse"
+                                             actionListener="#{perfilFormBean.agregarPerfil()}"
+                                             oncomplete="PF('registro').hide()"/>
+                            <p:commandButton id="btnCerrarRegistrarse"
+                                             icon="ui-icon-home" oncomplete="PF('registro').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                    </p:dialog>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

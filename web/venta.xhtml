@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlVentaEntrada" header="Venta de Entradas">
+                    <h:form id="frmVentaEntrada">
+                        <p:growl id="mensaje" showDetail="true"/>
+                        <p:panelGrid id="tblBotones" columns="2">
+                            <p:commandButton id="btnVentaEntrada" 
+                                             value="Venta"
+                                             oncomplete="PF('ventaEntrada').show()"
+                                             update="tblMuestraVentaEntrada"/>
+                            <p:commandButton id="btnCancelarVenta" value="Cancelar Venta"/>
+                        </p:panelGrid>
+                        <h:panelGrid id='tblMuestraVentaEntrada' columns="5">
+                            <p:dataTable id="dtTblCarteleras"
+                                         value="#{carteleraFormBean.listaCartelera}"
+                                         var="cadaCartelera" emptyMessage="No hay carteleras en la Base de Datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaCartelera.carCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Nombre">
+                                    <p:outputLabel value="#{cadaCartelera.peliculas.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Sala">
+                                    <p:outputLabel value="#{cadaCartelera.salas.salNombre}"/>
+                                </p:column>
+                                <p:column headerText="Fecha">
+                                    <p:outputLabel value="#{cadaCartelera.carFecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Horario">
+                                    <p:outputLabel value="#{cadaCartelera.carHorario}"/>
+                                </p:column>
+                                <p:column headerText="Precio">
+                                    <p:outputLabel value="#{cadaCartelera.carPrecio}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgVentaEntrada" widgetVar="ventaEntrada"
+                          header="Venta de Entrada" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesVentaEntrada" showDetail="true" showSummary="true"/>
+                    <h:form id="frmVentaEntradas">
+                        <p:panelGrid id="tblVentaEntrada" columns="2">
+                            <p:accordionPanel id="carteleraDia" value="#{carteleraFormBean.listaCartelera}" var="pel">
+                                <p:tab title="Peli: #{pel.peliculas.pelNombre}" disabled="#{ventaEntradaFormBean.act1}">
+                                    <h:panelGrid columns="2" cellpadding="10">
+                                        <f:facet name="header">
+                                            <p:graphicImage url="/resources/images/fondo.jpg" alt="nueva"
+                                                            width="80px" height="80px"/>
+                                        </f:facet>
+                                        <p:outputLabel value="Descripcion:" style="font-weight: bold" />
+                                        <p:outputLabel value="#{pel.peliculas.pelDescripcion}"/>
+                                        <p:commandButton icon="ui-icon-check" update="frmVentaEntradas"
+                                                         actionListener="#{ventaEntradaFormBean.establecerPelicula(pel)}"/>
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:accordionPanel>
+                            <p:outputLabel for="txtHora" value="Horario:"/>
+                            <p:selectOneMenu id="txtHora" value="#{ventaEntradaFormBean.horario}" required="true"
+                                             converter="omnifaces.SelectItemsConverter" disabled="#{ventaEntradaFormBean.act2}">
+                                <p:ajax  listener="#{ventaEntradaFormBean.cambiarPrecio()}" update=":frmVentaEntradas"/>
+                                <f:selectItem itemLabel="Seleccione Horario" itemValue="#{null}"/>
+                                <f:selectItem itemValue="#{ventaEntradaFormBean.unaCartelera.carHorario}" itemLabel="#{ventaEntradaFormBean.unaCartelera.carHorario}"/>
+                            </p:selectOneMenu>
+                                <p:outputLabel for="Precio" value="Precio:"/>
+                            <p:selectOneMenu id="Precio" value="#{ventaEntradaFormBean.pp}" required="true"
+                                             converter="omnifaces.SelectItemsConverter" disabled="#{ventaEntradaFormBean.act3}">
+                                <p:ajax listener="#{ventaEntradaFormBean.seleccionarButaca()}" update=":frmVentaEntradas"/>
+                                <f:selectItem itemLabel="Seleccione Precio" itemValue="#{null}"/>
+                                <f:selectItems value="#{ventaEntradaFormBean.carteleras}"
+                                               var="pei" itemLabel="#{pei.carPrecio}" itemValue="#{pei.carPrecio}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel id="lblButacaSeleccionada" value="Butaca: "/>
+                            <p:outputLabel id="txtButacaSeleccionada" value="#{ventaEntradaFormBean.resumenReserva}"/>
+                            <p:commandButton id="btnComprarEntrada" value="Comprar"
+                                             actionListener="#{ventaEntradaFormBean.comprarEntrada()}"
+                                             update=":frmVentaEntradas :mensajesVentaEntrada"
+                                             oncomplete="PF('ventaEntrada').hide()">
+                                <p:confirm header="Pedido de Confirmacion"
+                                           message="¿Confirma realizar la venta?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarComprarEntrada"
+                                             value="Salir" oncomplete="PF('ventaEntrada').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgSeleccionarButaca" widgetVar="seleccionButaca"
+                          header="Seleccion de Butaca" showEffect="explode" hideEffect="explode" modal="true">
+                    <h:form id="frmSeleccionButaca">
+                        <p:panelGrid>
+                            <p:commandButton id="btnSeleccionButaca" value="Reservar"
+                                             actionListener="#{ventaEntradaFormBean.reservarEntrada()}"
+                                             update=":frmVentaEntradas"
+                                             oncomplete="PF('seleccionoButaca').hide()"/>
+                            <p:commandButton id="btnCerrarSeleccionButaca"
+                                             value="Salir" oncomplete="PF.('seleccionButaca').hide()"/>
+                        </p:panelGrid>
+                        <p:panelGrid>
+                            <p:dataGrid columns="5" id='tblButacasA' rendered="#{ventaEntradaFormBean.definirSala() eq 1}"
+                                        value="#{ventaEntradaFormBean.butacaA}" var="but">
+                                <p:commandLink update="img" actionListener="#{ventaEntradaFormBean.reservarButaca(but.butIdentificador)}">
+                                    <p:graphicImage id="img" value="/resources/images/#{ventaEntradaFormBean.imagenBut}"
+                                                    width="40px" height="40px"/>
+                                </p:commandLink>
+                            </p:dataGrid>
+                            <p:dataGrid columns="8" id="tblButacasB" rendered="#{ventaEntradaFormBean.definirSala() eq 2}"
+                                        value="#{ventaEntradaFormBean.butacaB}" var="but">
+                                <p:commandLink update="img" actionListener="#{ventaEntradaFormBean.reservarButaca(but.butIdentificador)}">
+                                    <p:graphicImage id="img" value="/resources/images/#{ventaEntradaFormBean.imagenBut}"
+                                                    width="40px" height="40px"/>
+                                </p:commandLink>
+                            </p:dataGrid>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <div id="menu">
+                    <p:panel id="pnlUsuarioM" header="Usuarios">
+                        <h:form id="frmMuestraUsuarios">
+                            <p:dataTable id="dtTbUsuarios" value="#{usuarioFormBean.usuarioLista}" var="cadaUsuario" 
+                                         emptyMessage="Sin Registros">
+                                <p:column headerText="Codigo" style="width: 100px">
+                                    <p:outputLabel value="#{cadaUsuario.usuCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Nombre" style="width: 100px">
+                                    <p:outputLabel value="#{cadaUsuario.usuNombreUsuario}"/>
+                                </p:column>
+                                <p:column headerText="Tipo" style="width: 100px">
+                                    <p:outputLabel value="#{cadaUsuario.usuTipoUsuario}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:panel>
+                    <p:dialog id="dlgAgregarUsuario"
+                              widgetVar="agregarUsuario"
+                              header="Agregar Nuevo Usuario"
+                              resizable="false"
+                              showEffect="explode"
+                              width="400"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmAgregarUsuario">
+                            <p:panelGrid id="add" columns="2">
+                                <p:outputLabel for="name" value="Nombre Usuario:"/>
+                                <p:inputText id="name" value="#{usuarioFormBean.usuNombreUsuario}" required="true"/>
+                                <p:outputLabel for="pass1" value="Contraseña:"/>
+                                <p:password id="pass1" value="#{usuarioFormBean.usuPassword}" required="true"/>
+                                <p:outputLabel for="tip" value="Tipo Usuario:"/>
+                                <p:selectOneMenu id="tip" required="true" value="#{usuarioFormBean.usuTipoUsuario}">
+                                    <f:selectItem itemLabel="Final" itemValue="final"/>
+                                    <f:selectItem itemLabel="Administrador" itemValue="administrador"/>
+                                    <f:selectItem itemLabel="Supervisor" itemValue="supervisor"/>
+                                </p:selectOneMenu>
+                                <p:commandButton id="btnAgregarUsuario" value="Agregar"
+                                                 oncomplete="PF('agregarUsuario').hide()"
+                                                 update=":frmMuestraUsuarios"
+                                                 actionListener="#{usuarioFormBean.agregarUsuario()}">
+                                <p:confirm header="Pedido de confirmacion"
+                                           message="¿Confirma Agregar Usuario?" icon="ui-icon-alert"/>
+                                </p:commandButton>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('agregarUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    <p:confirmDialog id="confirmarcionDialogoUsuario"
+                                     global="true" showEffect="fade"
+                                     hideEffect="fade">
+                        <h:form id="frmConfrimacionOperacionUsuario">
+                            <p:commandButton value="Si" type="button"
+                                             styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"/>
+                            <p:commandButton value="No" type="button"
+                                             styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close"
+                                             style="float:right;"/>
+                        </h:form>
+                    </p:confirmDialog>
+                    <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

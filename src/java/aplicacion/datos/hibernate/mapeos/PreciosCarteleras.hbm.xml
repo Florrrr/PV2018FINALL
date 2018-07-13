@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 14/06/2018 11:42:49 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="cine" name="aplicacion.modelo.dominio.PrecioCartelera" optimistic-lock="version" table="precios_carteleras">
+    <id name="preCodigo" type="java.lang.Integer">
+      <column name="pre_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <property name="preDescripcion" type="string">
+      <column length="100" name="pre_descripcion" not-null="true"/>
+    </property>
+    <property name="prePrecio" type="double">
+      <column name="pre_precio" not-null="true" precision="22" scale="0"/>
+    </property>
+    <property name="preCartelera" type="int">
+      <column name="pre_cartelera" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

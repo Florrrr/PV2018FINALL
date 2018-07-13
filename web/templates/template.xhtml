@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Cine</title>
+    </h:head>
+
+    <h:body>
+        <div id="top">
+            <ui:insert name="top">
+                <p:growl id="msj" showDetail="true" sticky="true" autoUpdate="true"/>
+                <h:form rendered="#{loginFormBean.verificarSesion() eq 3}" >
+                    <p:menubar>
+                        <p:submenu label="Operaciones">
+                            <p:menuitem value="Usuarios" action="/menu" actionListener="#{usuarioFormBean.mostrarUsuarios()}"/>
+                            <p:menuitem value="Perfiles" action="/perfiles"/>
+                            <p:menuitem value="Peliculas" action="/peliculas"/>
+                            <p:menuitem value="Directores" action="/directores"/>
+                            <p:menuitem value="Clasificaciones" action="/clasificaciones"/>
+                            <p:menuitem value="Salas" action="/salas"/>
+                            <p:menuitem value="Carteleras" action="/carteleras"/>
+                            <p:menuitem value="Butacas" action="/butacas"/>
+                            <p:menuitem value="Butacas Cartelera" action="/butcar"/>
+                            <p:menuitem value="Venta" action="/venta"/>
+                        </p:submenu>
+                        <p:menuitem value="Datos Personales" oncomplete="PF('datosUsuario').show()"/>
+                        <f:facet name="options">
+                            <p:outputLabel value="Bienvenido: #{loginFormBean.nombreUsuarioValidado.usuNombreUsuario}"/>
+                            <p:commandButton value="Cerrar Sesion" action="#{loginFormBean.cerrarSesion()}"/>
+                        </f:facet>
+                    </p:menubar>
+                </h:form>
+                <h:form rendered="#{loginFormBean.verificarSesion() eq 1}">
+                    <p:menubar>
+                        <p:menuitem value="Cartelera" action="/carteleras"/>
+                        <p:menuitem value="Comprar" action="/venta"/>
+                        <p:menuitem value="Datos Personales" oncomplete="PF('datosUsuario').show()"/>
+                        <f:facet name="options">
+                            <p:outputLabel value="Bienvenido: #{loginFormBean.nombreUsuarioValidado.usuNombreUsuario}"/>
+                            <p:commandButton value="Cerrar Sesion" action="#{loginFormBean.cerrarSesion()}"/>
+                        </f:facet>
+                    </p:menubar>
+                </h:form>
+                <h:form rendered="#{loginFormBean.verificarSesion() eq 2}">
+                    <p:menubar>
+                        <p:submenu label="Operaciones">
+                            <p:menuitem value="Perfiles" action="/perfiles"/>
+                            <p:menuitem value="Peliculas" action="/peliculas"/>
+                            <p:menuitem value="Carteleras" action="/carteleras"/>
+                            <p:menuitem value="Butacas" action="/butacas"/>
+                            <p:menuitem value="Venta" action="/venta"/>
+                        </p:submenu>
+                        <f:facet name="options">
+                            <p:outputLabel value="Bienvenido: #{loginFormBean.nombreUsuarioValidado.usuNombreUsuario}"/>
+                            <p:commandButton value="Cerrar Sesion" action="#{loginFormBean.cerrarSesion()}"/>
+                        </f:facet>
+                    </p:menubar>
+                </h:form>
+            </ui:insert>
+        </div>
+
+        <div id="content" class="center_content">
+            <ui:insert name="content">Content</ui:insert>
+        </div>
+
+        <div id="bottom">
+            <ui:insert name="bottom"></ui:insert>
+        </div>
+
+    </h:body>
+
+</html>

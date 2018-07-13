@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlButacaCartelera" header="Butacas de Cartelera">
+                    <h:form id="frmButacaCartelera">
+                        <p:panelGrid id="tblBotonesButacaCartelera" columns="2">
+                            <p:commandButton id="btnAgregarButacaCartelera" value="Agregar"
+                                             oncomplete="PF('agregarButacaCartelera').show()"
+                                             update="tblMuestraButacaCartelera"/>
+                            <p:commandButton id="btnBuscarButacaCartelera" value="Buscar"
+                                             oncomplete="PF('buscarButacaCartelera').show()"
+                                             update="tblMuestraButacaCartelera"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraButacaCartelera" columns="5">
+                            <p:dataTable id="dtTblButacaCartelera" value="#{butacaCarteleraFormBean.listaButacaCartelera}"
+                                         var="cadaButacaCartelera" emptyMessage="No hay butacas en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaButacaCartelera.bcCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Identificador">
+                                    <p:outputLabel value="#{cadaButacaCartelera.bcIdentificadorButaca}"/>
+                                </p:column>
+                                <p:column headerText="Cartelera">
+                                    <p:outputLabel value="#{cadaButacaCartelera.carteleras.peliculas.pelNombre}"/>
+                                </p:column>
+                                <p:column headerText="Sala">
+                                    <p:outputLabel value="#{cadaButacaCartelera.carteleras.salas.salNombre}"/>
+                                </p:column>
+                                <p:column headerText="Disponibilidad">
+                                    <h:form rendered="#{cadaButacaCartelera.bcDisponible eq true}" >
+                                        <p:outputLabel value="Disponible"/>
+                                    </h:form>
+                                    <h:form rendered="#{cadaButacaCartelera.bcDisponible eq false}" >
+                                        <p:outputLabel value="Ocupado"/>
+                                    </h:form>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarButacaCartelera').show()"
+                                                     update=":frmButacaCartelera :frmModificarButacaCartelera"
+                                                     actionListener="#{butacaCarteleraFormBean.establecer(cadaButacaCartelera)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarButacaCartelera').show()"
+                                                     update=":frmButacaCartelera :frmEliminarButacaCartelera"
+                                                     actionListener="#{butacaCarteleraFormBean.establecer(cadaButacaCartelera)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarButacaCartelera"
+                              widgetVar="buscarButacaCartelera"
+                              header="Buscar Butaca de Cartelera"
+                              resizable="false"
+                              showEffect="explode"
+                              width="1000"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarButacaCartelera">
+                            <p:panelGrid id="tblBuscarButacaCartelera" columns="1">
+                                <h:panelGrid id="BuscarButacaCartelera" columns="4">
+                                    <p:outputLabel for="codigoButacaCartelera" value="Codigo de Butaca:"/>
+                                    <p:inputText id="codigoButacaCartelera" required="true"
+                                                 value="#{butacaCarteleraFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarButacaCartelera" value="Buscar"
+                                                     update=":frmBuscarButacaCartelera"
+                                                     actionListener="#{butacaCarteleraFormBean.buscar()}"/>
+                                    <p:commandButton id="btnCerrarBuscarButacaCartelera" value="Salir"
+                                                     oncomplete="PF('buscarButacaCartelera').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbButacaCarteleraBuscadx" value="#{butacaCarteleraFormBean.unaButacaCartelera}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.bcCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Identificador" style="width: 100px">
+                                        <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.bcIdentificadorButaca}"/>
+                                    </p:column>
+                                    <p:column headerText="Cartelera" style="width: 100px">
+                                        <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.carteleras.peliculas.pelNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Sala" style="width: 100px">
+                                        <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.carteleras.salas.salNombre}"/>
+                                    </p:column>
+                                    <p:column headerText="Disponibilidad" style="width: 100px">
+                                        <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.bcDisponible}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgBajaButacaCartelera" widgetVar="eliminarButacaCartelera"
+                          header="Baja de Butaca de Cartelera" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarButacaCartelera">
+                        <p:panelGrid id="tblBajaButacaCartelera" columns="2">
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.bcCodigo}"/>
+                            <p:outputLabel value="Identificador:"/>
+                            <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.bcIdentificadorButaca}"/>
+                            <p:outputLabel value="Cartelera:"/>
+                            <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.carteleras.peliculas.pelNombre}"/>
+                            <p:outputLabel value="Sala:"/>
+                            <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.carteleras.salas.salNombre}"/>
+                            <p:outputLabel value="Disponibilidad:"/>
+                            <p:outputLabel value="#{butacaCarteleraFormBean.unaButacaCartelera.bcDisponible}"/>
+                            <p:commandButton id="btnEliminarButacaCartelera" value="Eliminar"
+                                             actionListener="#{butacaCarteleraFormBean.eliminar()}"
+                                             update=":frmButacaCartelera"
+                                             oncomplete="PF('eliminarButacaCartelera').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Butaca de Cartelera?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaButacaCartelera" value="Salir"
+                                             oncomplete="PF('eliminarButacaCartelera').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaButacaCartelera" widgetVar="agregarButacaCartelera"
+                          header="Alta de Butaca de Cartelera" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaButacaCartelera" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaButacaCartelera">
+                        <p:panelGrid id="tblAltaButacaCartelera" columns="2">
+                            <p:outputLabel for="txtNomSala" value="Cartelera:"/>
+                            <p:selectOneMenu id="txtNomSala" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{butacaCarteleraFormBean.unaCartelera}">
+                                <f:selectItem itemLabel="Seleccione Cartelera" itemValue="#{null}"/>
+                                <f:selectItems value="#{carteleraFormBean.listaCartelera}"
+                                               var="cadaCartelera" itemLabel="#{cadaCartelera.peliculas.pelNombre}" itemValue="#{cadaCartelera}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtIdButaca" value="Identificador:"/>
+                            <p:selectOneMenu id="txtIdButaca" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{butacaCarteleraFormBean.id}">
+                                <f:selectItem itemLabel="Seleccione Butaca" itemValue="#{null}"/>
+                                <f:selectItems value="#{butacaFormBean.listaButaca}"
+                                               var="cadaButaca" itemLabel="#{cadaButaca.butIdentificador}" itemValue="#{cadaButaca.butIdentificador}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtDispBc" value="Disponibilidad:"/>
+                            <p:selectOneMenu id="txtDispBc" value="#{butacaCarteleraFormBean.disp}" required="true">
+                                <f:selectItem itemLabel="Disponible" itemValue="#{true}"/>
+                                <f:selectItem itemLabel="Ocupado" itemValue="#{false}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="btnAgregarButacaCartelera" value="Agregar"
+                                             actionListener="#{butacaCarteleraFormBean.agregar()}"
+                                             update=":frmButacaCartelera :mensajesAltaButacaCartelera"
+                                             oncomplete="PF('agregarButacaCartelera').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Butaca de Cartelera?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaButacaCartelera" value="Salir"
+                                             oncomplete="PF('agregarButacaCartelera').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarButacaCartelera" widgetVar="modificarButacaCartelera"
+                          header="Modificacion de Butaca de Cartelera" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarButacaCartelera">
+                        <p:panelGrid id="pnlModificarButacaCartelera" columns="2">
+                            <p:outputLabel for="txtSalas" value="Cartelera:"/>
+                            <p:selectOneMenu id="txtSalas" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{butacaCarteleraFormBean.unaButacaCartelera.carteleras}">
+                                <f:selectItem itemLabel="Seleccione Cartelera" itemValue="#{null}"/>
+                                <f:selectItems value="#{carteleraFormBean.listaCartelera}"
+                                               var="cadaCartelera" itemLabel="#{cadaCartelera.peliculas.pelNombre}" itemValue="#{cadaCartelera}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="idBut" value="Identificador:"/>
+                            <p:selectOneMenu id="idBut" required="true" converter="omnifaces.SelectItemsConverter"
+                                             value="#{butacaCarteleraFormBean.unaButacaCartelera.bcIdentificadorButaca}">
+                                <f:selectItems value="#{butacaFormBean.listaButaca}"
+                                               var="cadaButaca" itemLabel="#{cadaButaca.butIdentificador}" itemValue="#{cadaButaca.butIdentificador}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel for="txtDispBc" value="Disponibilidad:"/>
+                            <p:selectOneMenu id="txtDispBc" value="#{butacaCarteleraFormBean.unaButacaCartelera.bcDisponible}" required="true">
+                                <f:selectItem itemLabel="Disponible" itemValue="#{true}"/>
+                                <f:selectItem itemLabel="Ocupado" itemValue="#{false}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="btnModificarButacaCartelera" value="Modificiar"
+                                             actionListener="#{butacaCarteleraFormBean.modificar()}"
+                                             update=":frmButacaCartelera"
+                                             oncomplete="PF('modificarButacaCartelera').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Butaca de Cartelera?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarButacaCartelera" value="Salir"
+                                             oncomplete="PF('modificarButacaCartelera').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>             
+                <p:confirmDialog id="confirmarcionDialogoButacaCartelera"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionButacaCartelera">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 14/06/2018 11:42:49 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="cine" name="aplicacion.modelo.dominio.PelDir" optimistic-lock="version" table="pel_dir">
+    <id name="pdCodigo" type="java.lang.Integer">
+      <column name="pd_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="aplicacion.modelo.dominio.Pelicula" fetch="join" name="peliculas">
+      <column name="pd_pelicula" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="aplicacion.modelo.dominio.Director" fetch="join" name="directores">
+      <column name="pd_director" not-null="true"/>
+    </many-to-one>
+    <property name="pdEstado" type="boolean">
+      <column name="pd_estado" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

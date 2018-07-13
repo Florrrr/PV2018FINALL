@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="./templates/template.xhtml">
+            <ui:define name="content">
+                <p:panel id="pnlDirector" header="Directores">
+                    <h:form id="frmDirector">
+                        <p:panelGrid id="tblBotonesDirector" columns="2">
+                            <p:commandButton id="btnAgregarDirector" value="Agregar"
+                                             oncomplete="PF('agregarDirector').show()"
+                                             update="tblMuestraDirector"/>
+                            <p:commandButton id="btnBuscarDirector" value="Buscar"
+                                             oncomplete="PF('buscarDirector').show()"
+                                             update="tblMuestraDirector"/>
+                        </p:panelGrid>
+                        <h:panelGrid id="tblMuestraDirector" columns="5">
+                            <p:dataTable id="dtTblDirector" value="#{directorFormBean.listaDirectores}"
+                                         var="cadaDirector" emptyMessage="No hay directores en la base de datos">
+                                <p:column headerText="Codigo">
+                                    <p:outputLabel value="#{cadaDirector.dirCodigo}"/>
+                                </p:column>
+                                <p:column headerText="Nombres">
+                                    <p:outputLabel value="#{cadaDirector.dirNombres}"/>
+                                </p:column>
+                                <p:column headerText="Apellidos">
+                                    <p:outputLabel value="#{cadaDirector.dirApellidos}"/>
+                                </p:column>
+                                <p:column headerText="Edicion">
+                                    <p:commandButton icon="ui-icon-pencil" oncomplete="PF('modificarDirector').show()"
+                                                     update=":frmDirector :frmModificarDirector"
+                                                     actionListener="#{directorFormBean.establecer(cadaDirector)}"/>
+                                    <p:commandButton icon="ui-icon-trash" oncomplete="PF('eliminarDirector').show()"
+                                                     update=":frmDirector :frmEliminarDirector"
+                                                     actionListener="#{directorFormBean.establecer(cadaDirector)}"/>
+                                </p:column>          
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </h:form>
+                </p:panel>
+                <p:dialog id="dlgDatosPersonales"
+                              widgetVar="datosUsuario"
+                              header="Datos Personales"
+                              resizable="false"
+                              showEffect="explode"
+                              width="300"
+                              hideEffect="explode" modal="true">
+                        <h:form id="frmDatosUsuario">
+                            <p:panelGrid id="pnlDatosUser" columns="2">
+                                <p:outputLabel value="Usuario:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuNombreUsuario}"/>
+                                <p:outputLabel value="Tipo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuTipoUsuario}"/>
+                                <p:outputLabel value="Codigo:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.usuarios.usuCodigo}"/>
+                                <p:outputLabel value="Nombres:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perNombres}"/>
+                                <p:outputLabel value="Apellidos:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perApellidos}"/>
+                                <p:outputLabel value="DNI:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDni}"/>
+                                <p:outputLabel value="Fecha Nacimiento:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perFechaNac}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                </p:outputLabel>
+                                <p:outputLabel value="E-mail:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perEmail}"/>
+                                <p:outputLabel value="Direccion:"/>
+                                <p:outputLabel value="#{perfilFormBean.datosUsuarioValidado.perDireccion}"/>
+                                <p:commandButton id="btnCerrarAgregarUsuario" value="Salir"
+                                                 oncomplete="PF('datosUsuario').hide()"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                <p:dialog id="dlgBuscarDirector"
+                              widgetVar="buscarDirector"
+                              header="Buscar Director"
+                              resizable="false"
+                              showEffect="explode"
+                              width="500"
+                              hideEffect="explode" modal="true">
+                    <h:form id="frmBuscarDirector">
+                            <p:panelGrid id="tblBuscarDirector" columns="1">
+                                <h:panelGrid id="BuscarDirector" columns="4">
+                                    <p:outputLabel for="codigoDirector" value="Codigo de Director:"/>
+                                    <p:inputText id="codigoDirector" required="true"
+                                                 value="#{directorFormBean.codBuscado}"/>
+                                    <p:commandButton id="btnBuscarDirector" value="Buscar"
+                                                     update=":frmBuscarDirector"
+                                                     actionListener="#{directorFormBean.buscar()}"/>
+                                    <p:commandButton id="btnCerrarBuscarDirector" value="Salir"
+                                                     oncomplete="PF('buscarDirector').hide()"/>
+                                </h:panelGrid>
+                                <p:dataTable id="dtTbDirectorBuscadx" value="#{directorFormBean.unDirector}" emptyMessage="No encontrado">
+                                    <p:column headerText="Codigo" style="width: 100px">
+                                        <p:outputLabel value="#{directorFormBean.unDirector.dirCodigo}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombres" style="width: 100px">
+                                        <p:outputLabel value="#{directorFormBean.unDirector.dirNombres}"/>
+                                    </p:column>
+                                    <p:column headerText="Apellidos" style="width: 100px">
+                                        <p:outputLabel value="#{directorFormBean.unDirector.dirApellidos}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>               
+                    </h:form>    
+                </p:dialog>
+                <p:dialog id="dlgBajaDirector" widgetVar="eliminarDirector"
+                          header="Baja de Director" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmEliminarDirector">
+                        <p:panelGrid id="tblBajaDirector" columns="2">
+                            <p:outputLabel value="Codigo:"/>
+                            <p:outputLabel value="#{directorFormBean.unDirector.dirCodigo}" />
+                            <p:outputLabel value="Nombres:"/>
+                            <p:outputLabel value="#{directorFormBean.unDirector.dirNombres}"/>
+                            <p:outputLabel value="Apellidos:"/>
+                            <p:outputLabel value="#{directorFormBean.unDirector.dirApellidos}"/>
+                            <p:commandButton id="btnEliminarDirector" value="Eliminar"
+                                             actionListener="#{directorFormBean.eliminar()}"
+                                             update=":frmDirector"
+                                             oncomplete="PF('eliminarDirector').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Eliminar Director?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarBajaDirector" value="Salir"
+                                             oncomplete="PF('eliminarDirector').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgAltaDirector" widgetVar="agregarDirector"
+                          header="Alta de Director" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <p:growl id="mensajesAltaDirector" showDetail="false"  showSummary="true"/>
+                    <h:form id="frmAltaDirector">
+                        <p:panelGrid id="tblAltaDirector" columns="2">
+                            <p:outputLabel for="txtNombresDirector" value="Nombre:"/>
+                            <p:inputText id="txtNombresDirector" value="#{directorFormBean.nombres}" required="true"/>
+                            <p:outputLabel for="txtApellidosDirector" value="Apellidos:"/>
+                            <p:inputText id="txtApellidosDirector" value="#{directorFormBean.apellidos}" required="true"/>
+                            <p:commandButton id="btnAgregarDirector" value="Agregar"
+                                             actionListener="#{directorFormBean.agregar()}"
+                                             update=":frmDirector :mensajesAltaDirector"
+                                             oncomplete="PF('agregarDirector').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Agregar Director?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarAltaDirector" value="Salir"
+                                             oncomplete="PF('agregarDirector').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <p:dialog id="dlgModificarDirector" widgetVar="modificarDirector"
+                          header="Modificacion de Director" resizable="false"
+                          showEffect="explode" hideEffect="explode"
+                          modal="true">
+                    <h:form id="frmModificarDirector">
+                        <p:panelGrid id="pnlModificarDirector" columns="2">
+                            <p:outputLabel for="NombresDirector" value="Nombres:"/>
+                            <p:inputText id="NombresDirector" value="#{directorFormBean.unDirector.dirNombres}" required="true"/>
+                            <p:outputLabel for="ApellidosDirector" value="Apellidos:"/>
+                            <p:inputText id="ApellidosDirector" value="#{directorFormBean.unDirector.dirApellidos}" required="true"/>
+                            <p:commandButton id="btnModificarDirector" value="Modificiar"
+                                             actionListener="#{directorFormBean.modificar()}"
+                                             update=":frmDirector"
+                                             oncomplete="PF('modificarDirector').hide()">
+                                <p:confirm header="Pedido de Confirmacion" message="¿Confirma Modificar Director?"
+                                           icon="ui-icon-alert"/>
+                            </p:commandButton>
+                            <p:commandButton id="btnCerrarModificarDirector" value="Salir"
+                                             oncomplete="PF('modificarDirector').hide()"/>
+                        </p:panelGrid>
+                    </h:form>
+                </p:dialog>             
+                <p:confirmDialog id="confirmarcionDialogoDirector"
+                                 global="true" showEffect="fade"
+                                 hideEffect="fade">
+                    <h:form id="frmConfrimacionOperacionDirector">
+                        <p:commandButton value="Si" type="button"
+                                         styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                        <p:commandButton value="No" type="button"
+                                         styleClass="ui-confirmdialog-no" icon="ui-icon-close"
+                                         style="float:right;"/>
+                    </h:form>
+                </p:confirmDialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
